@@ -1,26 +1,29 @@
 const { Server } = require("socket.io");
 const http = require("http");
+const express = require("express");
+const app = express();
 
-const server = http.createServer();
+const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "*", // accetta tutte le connessioni
-  },
+    origin: "*", // accetta tutto, puoi restringere dopo
+  }
 });
 
+const PORT = process.env.PORT || 3000;
+
 io.on("connection", (socket) => {
-  console.log("🟢 Nuovo utente connesso:", socket.id);
+  console.log("🟢 Nuovo utente connesso");
 
   socket.on("chat message", (msg) => {
-    console.log("💬 Messaggio ricevuto:", msg);
-    io.emit("chat message", msg); // lo rimanda a tutti
+    io.emit("chat message", msg);
   });
 
   socket.on("disconnect", () => {
-    console.log("🔴 Utente disconnesso:", socket.id);
+    console.log("🔴 Utente disconnesso");
   });
 });
 
-server.listen(3000, () => {
-  console.log("✅ Server in ascolto su http://localhost:3000");
+server.listen(PORT, "0.0.0.0", () => {
+  console.log(`🚀 Server attivo su porta ${PORT}`);
 });
