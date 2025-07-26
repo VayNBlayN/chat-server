@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>VerveChat</title>
-    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
-
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>VerveChat</title>
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <h1>💬 Mini Chat</h1>
@@ -14,6 +13,9 @@
     <input id="msg" autocomplete="off" placeholder="Scrivi un messaggio..." />
     <button>Invia</button>
   </form>
+
+  <!-- IMPORTANT: Load socket.io from your own server -->
+  <script src="/socket.io/socket.io.js"></script>
   <script src="renderer.js"></script>
 </body>
 </html>
