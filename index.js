@@ -3,19 +3,24 @@ import { createServer } from 'http';
 import { Server } from 'socket.io';
 
 const app = express();
-const httpServer = createServer(app);
-const io = new Server(httpServer, {
+const server = createServer(app);
+
+// Socket.IO server con CORS abilitato
+const io = new Server(server, {
   cors: {
-    origin: "*", // oppure specifica i domini Electron
+    origin: "*", // Puoi restringere se vuoi
+    methods: ["GET", "POST"]
   }
 });
 
 io.on('connection', (socket) => {
-  console.log('🔌 Client connesso:', socket.id);
+  console.log('🔌 Nuovo client connesso:', socket.id);
 
+  // Riceve un messaggio dal client
   socket.on('messaggio', (data) => {
-    console.log('📩 Ricevuto:', data);
-    socket.broadcast.emit('messaggio', data); // invia a tutti gli altri client
+    console.log('📨 Messaggio ricevuto:', data);
+    // Invia il messaggio a tutti tranne chi l'ha mandato
+    socket.broadcast.emit('messaggio', data);
   });
 
   socket.on('disconnect', () => {
@@ -23,7 +28,8 @@ io.on('connection', (socket) => {
   });
 });
 
-const PORT = process.env.PORT || 3000;
-httpServer.listen(PORT, () => {
-  console.log(`🚀 Server attivo su http://localhost:${PORT}`);
+// Porta dinamica per Render (non usare porta fissa come 10000)
+const PORT = process.env.PORT || 10000;
+server.listen(PORT, () => {
+  console.log(`🚀 Server in ascolto sulla porta ${PORT}`);
 });
