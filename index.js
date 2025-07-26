@@ -12,6 +12,11 @@ const io = new Server(server, {
 
 const PORT = process.env.PORT || 10000;
 
+// ✅ Serve index.html dalla stessa cartella
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "index.html"));
+});
+
 io.on("connection", (socket) => {
   console.log("🟢 Nuovo utente connesso");
 
