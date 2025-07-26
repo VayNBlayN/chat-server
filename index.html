@@ -96,11 +96,21 @@
 </head>
 <body>
   <div id="chat">
-    <h2>Chat Remota con Electron</h2>
-    <div id="messages"></div>
-    <div id="inputArea">
-      <input type="text" id="messageInput" placeholder="Scrivi un messaggio...">
-      <button onclick="sendMessage()">Invia</button>
+    <h2 class="title">Welcome to Verve</h2>
+
+    <!-- Schermata per inserire lo username -->
+    <div id="usernameArea">
+      <input id="usernameInput" type="text" placeholder="Inserisci il tuo username" />
+      <button class="enterBtn" onclick="setUsername()">ENTER</button>
+    </div>
+
+    <!-- Area della chat -->
+    <div id="chatArea" style="display: none;">
+      <div id="messages"></div>
+      <div id="inputArea">
+        <input id="messageInput" type="text" placeholder="Scrivi un messaggio..." />
+        <button onclick="sendMessage()">Invia</button>
+      </div>
     </div>
   </div>
 
