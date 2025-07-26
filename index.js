@@ -11,12 +11,12 @@ const io = socketIo(server);
 // Enable CORS
 app.use(cors());
 
-// Serve static files from /public
-app.use(express.static(path.join(__dirname, 'public')));
+// Serve static files from the root directory
+app.use(express.static(__dirname)); // Serve i file dalla radice
 
 // Root route
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname,'index.html'));
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 // Socket.IO connection
