@@ -8,32 +8,32 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
 
-// Abilita CORS
+// Enable CORS
 app.use(cors());
 
-// Servi file statici dalla root della repo
-app.use(express.static(__dirname)); // ora cerca index.html e renderer.js nella root
+// Serve static files from /public
+app.use(express.static(path.join(__dirname, 'public')));
 
-// Rotta principale
+// Root route
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html')); // index.html deve essere nella root
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Socket.IO
+// Socket.IO connection
 io.on('connection', (socket) => {
-  console.log('✅ Un utente si è connesso');
+  console.log('✅ A user connected');
 
   socket.on('chat message', (msg) => {
     io.emit('chat message', msg);
   });
 
   socket.on('disconnect', () => {
-    console.log('❌ Utente disconnesso');
+    console.log('❌ A user disconnected');
   });
 });
 
-// Porta
+// Start the server
 const PORT = process.env.PORT || 10000;
 server.listen(PORT, () => {
-  console.log(`🚀 Server attivo sulla porta ${PORT}`);
+  console.log(`🚀 Server running on port ${PORT}`);
 });
