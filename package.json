@@ -1,10 +1,10 @@
 {
   "name": "chat-server",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "renderer.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "node renderer.js"
   },
   "keywords": [],
   "author": "",
