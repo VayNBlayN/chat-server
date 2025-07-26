@@ -1,7 +1,7 @@
 {
   "name": "chat-server-electron",
   "version": "1.0.0",
-  "type": "module",         ← QUESTA RIGA risolve il warning
+  "type": "module",       
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
