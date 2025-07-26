@@ -1,39 +1,29 @@
-const express = require('express');
-const http = require('http');
-const socketIo = require('socket.io');
-const cors = require('cors');
-const path = require('path');
+import express from 'express';
+import { createServer } from 'http';
+import { Server } from 'socket.io';
 
 const app = express();
-const server = http.createServer(app);
-const io = socketIo(server);
-
-// Enable CORS
-app.use(cors());
-
-// Serve static files from the root directory
-app.use(express.static(__dirname)); // Serve i file dalla radice
-
-// Root route
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
+const httpServer = createServer(app);
+const io = new Server(httpServer, {
+  cors: {
+    origin: "*", // oppure specifica i domini Electron
+  }
 });
 
-// Socket.IO connection
 io.on('connection', (socket) => {
-  console.log('✅ A user connected');
+  console.log('🔌 Client connesso:', socket.id);
 
-  socket.on('chat message', (msg) => {
-    io.emit('chat message', msg);
+  socket.on('messaggio', (data) => {
+    console.log('📩 Ricevuto:', data);
+    socket.broadcast.emit('messaggio', data); // invia a tutti gli altri client
   });
 
   socket.on('disconnect', () => {
-    console.log('❌ A user disconnected');
+    console.log('❌ Client disconnesso:', socket.id);
   });
 });
 
-// Start the server
-const PORT = process.env.PORT || 10000;
-server.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
+const PORT = process.env.PORT || 3000;
+httpServer.listen(PORT, () => {
+  console.log(`🚀 Server attivo su http://localhost:${PORT}`);
 });
