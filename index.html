@@ -107,41 +107,47 @@
   <!-- Socket.IO client CDN -->
   <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
   <script>
-    // Inserisci qui l’URL del tuo server su Render.com
-    const socket = io('https://chat-server-2vhg.onrender.com'); // <-- Modifica questo!
+  const socket = io("https://chat-server-2vhg.onrender.com"); // CAMBIA QUI
 
-    // Quando connesso
-    socket.on('connect', () => {
-      console.log('🟢 Connesso al server Socket.IO');
-    });
+    let username = "";
 
-    // Quando arriva un messaggio
-    socket.on('messaggio', (msg) => {
-      const messages = document.getElementById('messages');
-      const p = document.createElement('p');
-      p.textContent = '📩 ' + msg;
+    function setUsername() {
+      const input = document.getElementById("usernameInput");
+      const name = input.value.trim();
+      if (!name) return alert("Devi inserire uno username!");
+
+      username = name;
+
+      // Nascondi input username, mostra la chat
+      document.getElementById("usernameArea").style.display = "none";
+      document.getElementById("chatArea").style.display = "block";
+    }
+
+    function sendMessage() {
+      const input = document.getElementById("messageInput");
+      const msg = input.value.trim();
+      if (!msg) return;
+
+      socket.emit("chat message", `[${username}]: ${msg}`);
+      input.value = "";
+    }
+
+    socket.on("chat message", (msg) => {
+      const messages = document.getElementById("messages");
+      const p = document.createElement("p");
+      p.textContent = msg;
       messages.appendChild(p);
       messages.scrollTop = messages.scrollHeight;
     });
 
-    // Invia un messaggio al server
-    function sendMessage() {
-      const input = document.getElementById('messageInput');
-      const msg = input.value.trim();
-      if (msg) {
-        socket.emit('messaggio', msg);
-        const messages = document.getElementById('messages');
-        const p = document.createElement('p');
-        p.textContent = '🧑‍💻 ' + msg;
-        messages.appendChild(p);
-        messages.scrollTop = messages.scrollHeight;
-        input.value = '';
-      }
-    }
+    // ENTER per inviare messaggio
+    document.getElementById("messageInput").addEventListener("keydown", (e) => {
+      if (e.key === "Enter") sendMessage();
+    });
 
-    // Invio con il tasto Enter
-    document.getElementById('messageInput').addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') sendMessage();
+    // ENTER per impostare username
+    document.getElementById("usernameInput").addEventListener("keydown", (e) => {
+      if (e.key === "Enter") setUsername();
     });
   </script>
 </body>
